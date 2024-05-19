@@ -1,0 +1,17 @@
+name
+High[-3:-1] Decreasing
+Close Greater than High[-1]
+Close Greater than X
+Volume Greater than X
+MA(9) Greater than WMA(5)
+RSI(14) crossed above X
+RSI(14) Greater than X
+Close crossed above MA(9)
+CCI(14) Greater than X
+AROONUP(25) Greater than X
+AROONDOWN(25) Less than X
+ADX(8) Greater than X
+MA(3) Greater than MA(9)
+ADX(13) Greater than X
++DI(13) is above X
+-DI below X
