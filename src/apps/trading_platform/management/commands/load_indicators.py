@@ -16,8 +16,8 @@ class Command(BaseCommand):
             reader = csv.DictReader(file)
             for row in reader:
                 name = row['name']
-                if not Indicator.objects.filter(name=name).exists():
-                    Indicator.objects.create(name=name)
+                indicator, created = Indicator.objects.get_or_create(name=name)
+                if created:
                     self.stdout.write(self.style.SUCCESS(f'Indicator "{name}" added successfully.'))
                 else:
                     self.stdout.write(self.style.WARNING(f'Indicator "{name}" already exists.'))
