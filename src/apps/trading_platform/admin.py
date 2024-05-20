@@ -2,14 +2,7 @@ from typing import Any
 from django.db.models import Model
 from django.contrib import admin
 from .models import TradingAccount, IndicatorSetting, DealSettings
-from django.contrib.admin import AdminSite
-
-
-class CustomAdminSite(AdminSite):
-    admin.site.site_header = 'Trading Platform'
-
-
-admin_site = CustomAdminSite()
+from django.core.handlers.wsgi import WSGIRequest
 
 
 @admin.register(TradingAccount)
@@ -36,13 +29,13 @@ class DealSettingsAdmin(admin.ModelAdmin):
     list_filter = ('status', 'strategy_choice',)
     filter_horizontal = ('indicator_settings',)
 
-    def formfield_for_foreignkey(self, db_field: Model, request: Any, **kwargs: Any) -> Any:
+    def formfield_for_foreignkey(self, db_field: Model, request: WSGIRequest, **kwargs: Any) -> Any:
         """
         Customizes the form field for a ForeignKey field.
 
         Args:
             db_field (Model): The ForeignKey field.
-            request (Any): The request object.
+            request (WSGIRequest): The request object.
             **kwargs (Any): Additional keyword arguments.
 
         Returns:
