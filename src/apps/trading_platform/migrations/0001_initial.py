@@ -5,7 +5,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -41,8 +40,10 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('numeric_value', models.FloatField(verbose_name='Numeric Value')),
-                ('recognition_method', models.CharField(blank=True, max_length=50, null=True, verbose_name='Recognition Method')),
-                ('indicator', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='settings', to='trading_platform.indicator', verbose_name='Indicator')),
+                ('recognition_method',
+                 models.CharField(blank=True, max_length=50, null=True, verbose_name='Recognition Method')),
+                ('indicator', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='settings',
+                                                to='trading_platform.indicator', verbose_name='Indicator')),
             ],
             options={
                 'verbose_name': 'Indicator Setting',
@@ -53,10 +54,16 @@ class Migration(migrations.Migration):
             name='DealSettings',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('status', models.CharField(choices=[('active', 'Active'), ('inactive', 'Inactive')], default='inactive', max_length=10, verbose_name='Status')),
-                ('strategy_choice', models.CharField(choices=[('long', 'Long'), ('short', 'Short')], max_length=10, verbose_name='Strategy Choice')),
-                ('indicator_settings', models.ManyToManyField(to='trading_platform.indicatorsetting', verbose_name='Indicator Settings')),
-                ('trading_account', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='trading_platform.tradingaccount', verbose_name='Trading Account')),
+                ('status',
+                 models.CharField(choices=[('active', 'Active'), ('inactive', 'Inactive')], default='inactive',
+                                  max_length=10, verbose_name='Status')),
+                ('strategy_choice', models.CharField(choices=[('long', 'Long'), ('short', 'Short')], max_length=10,
+                                                     verbose_name='Strategy Choice')),
+                ('indicator_settings',
+                 models.ManyToManyField(to='trading_platform.indicatorsetting', verbose_name='Indicator Settings')),
+                ('trading_account',
+                 models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='trading_platform.tradingaccount',
+                                   verbose_name='Trading Account')),
             ],
             options={
                 'verbose_name': 'Deal Settings',

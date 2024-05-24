@@ -1,4 +1,3 @@
-from datetime import datetime
 
 import pandas
 import pandas_market_calendars as market_calendar
