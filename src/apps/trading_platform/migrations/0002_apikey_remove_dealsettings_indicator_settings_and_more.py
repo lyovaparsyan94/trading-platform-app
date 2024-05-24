@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('trading_platform', '0001_initial'),
     ]
@@ -56,22 +55,27 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='dealsettings',
             name='indicator_settings_long',
-            field=models.ManyToManyField(related_name='indicator_settings_long', to='trading_platform.indicatorsetting', verbose_name='Indicator Settings Long'),
+            field=models.ManyToManyField(related_name='indicator_settings_long', to='trading_platform.indicatorsetting',
+                                         verbose_name='Indicator Settings Long'),
         ),
         migrations.AddField(
             model_name='dealsettings',
             name='indicator_settings_short',
-            field=models.ManyToManyField(related_name='indicator_settings_short', to='trading_platform.indicatorsetting', verbose_name='Indicator Settings Short'),
+            field=models.ManyToManyField(related_name='indicator_settings_short',
+                                         to='trading_platform.indicatorsetting',
+                                         verbose_name='Indicator Settings Short'),
         ),
         migrations.AddField(
             model_name='dealsettings',
             name='start_time_long',
-            field=models.IntegerField(blank=True, null=True, verbose_name='Start Time Long (minutes after market open)'),
+            field=models.IntegerField(blank=True, null=True,
+                                      verbose_name='Start Time Long (minutes after market open)'),
         ),
         migrations.AddField(
             model_name='dealsettings',
             name='start_time_short',
-            field=models.IntegerField(blank=True, null=True, verbose_name='Start Time Short (minutes after market open)'),
+            field=models.IntegerField(blank=True, null=True,
+                                      verbose_name='Start Time Short (minutes after market open)'),
         ),
         migrations.AddField(
             model_name='dealsettings',
