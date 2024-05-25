@@ -14,7 +14,7 @@ class Command(BaseCommand):
         """Handle command execution."""
         csv_file_path = os.path.join(settings.BASE_DIR.parent, 'indicators.csv')
 
-        with open(csv_file_path, newline='') as file:
+        with open(csv_file_path, mode='r', newline='') as file:
             reader = csv.DictReader(file)
             for row in reader:
                 name = row['name']

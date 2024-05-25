@@ -1,10 +1,9 @@
-from django.core.exceptions import ValidationError
 from django.db import models
 
 
 class APIKey(models.Model):
-    api_key = models.CharField(max_length=255, verbose_name="API Key")
-    api_secret = models.CharField(max_length=255, verbose_name="API Secret")
+    api_key = models.CharField(max_length=255, verbose_name="API Key", blank=False)
+    api_secret = models.CharField(max_length=255, verbose_name="API Secret", blank=False)
 
     def __str__(self):
         return self.api_key
@@ -120,16 +119,6 @@ class DealSettings(models.Model):
 
     capital_allocation = models.FloatField(verbose_name="Capital Allocation", null=True, blank=True)
     use_full_capital = models.BooleanField(default=False, verbose_name="Use Full Capital")
-
-    def clean(self):
-        if not APIKey.objects.filter(api_key__isnull=False).exists():
-            raise ValidationError("API Key must be set before any operations can be performed.")
-        if self.use_full_capital and self.capital_allocation is not None:
-            raise ValidationError("If 'Use Full Capital' is selected, 'Capital Allocation' should be empty.")
-        if not self.use_full_capital and self.capital_allocation is None:
-            raise ValidationError("If 'Use Full Capital' is not selected, 'Capital Allocation' should be provided.")
-        if not self.enable_long_strategy and not self.enable_short_strategy:
-            raise ValidationError("At least one strategy (long or short) must be enabled.")
 
     def __str__(self):
         return f"DealSettings for {self.trading_account} ({self.get_status_display()})"
