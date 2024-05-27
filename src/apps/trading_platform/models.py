@@ -126,3 +126,12 @@ class DealSettings(models.Model):
     class Meta:
         verbose_name = "Deal Settings"
         verbose_name_plural = "Deal Settings"
+
+
+class Stock(models.Model):
+    name = models.CharField(verbose_name="Stock Name", max_length=128)
+    active = models.BooleanField(verbose_name="Active", default=True)
+
+    class Meta:
+        verbose_name = "Stock"
+        verbose_name_plural = "Stocks"
