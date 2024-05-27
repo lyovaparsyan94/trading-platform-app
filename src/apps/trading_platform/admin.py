@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.core.exceptions import ValidationError
-from .models import APIKey, DealSettings, IndicatorSetting, TradingAccount
+from .models import APIKey, DealSettings, IndicatorSetting, TradingAccount, Stock
 
 
 class DisableActionsIfNoAPIKeyMixin:
@@ -146,3 +146,23 @@ class DealSettingsAdmin(DisableActionsIfNoAPIKeyMixin, admin.ModelAdmin):
         if db_field.name in ['indicator_settings_long', 'indicator_settings_short', ]:
             kwargs['queryset'] = IndicatorSetting.objects.all()
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+
+@admin.register(Stock)
+class StockAdmin(admin.ModelAdmin):
+    list_display = ('name', 'active',)
+    search_fields = ('name',)
+
+    def get_readonly_fields(self, request, obj=None):
+        if obj:
+            return ('name',)
+        return ()
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
