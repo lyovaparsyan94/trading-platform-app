@@ -12,7 +12,7 @@ class Command(BaseCommand):
 
     def handle(self, *args: str, **kwargs: str) -> None:
         """Handle command execution."""
-        csv_file_path = os.path.join(settings.BASE_DIR.parent, 'indicators.csv')
+        csv_file_path = os.path.join("src", "apps", "trading_platform", "static", "indicators.csv")
 
         with open(csv_file_path, mode='r', newline='') as file:
             reader = csv.DictReader(file)
