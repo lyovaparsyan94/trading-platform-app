@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.core.exceptions import ValidationError
-from .models import APIKey, DealSettings, IndicatorSetting, TradingAccount, Stock
+
+from .models import APIKey, DealSettings, StockMonitorConfiguration, TradingAccount
 
 
 class DisableActionsIfNoAPIKeyMixin:
@@ -54,29 +55,11 @@ class TradingAccountAdmin(DisableActionsIfNoAPIKeyMixin, admin.ModelAdmin):
         return super().changelist_view(request, extra_context)
 
 
-@admin.register(IndicatorSetting)
-class IndicatorSettingAdmin(DisableActionsIfNoAPIKeyMixin, admin.ModelAdmin):
-    list_display = ('indicator', 'numeric_value', 'recognition_method',)
-
-    def changelist_view(self, request, extra_context=None):
-        if not APIKey.objects.exists():
-            self.message_user(request, "Need set API Key at first", level='error')
-        return super().changelist_view(request, extra_context)
-
-
 @admin.register(DealSettings)
 class DealSettingsAdmin(DisableActionsIfNoAPIKeyMixin, admin.ModelAdmin):
     fieldsets = (
         (None, {
             'fields': ('trading_account',),
-        }),
-        ('Indicator Settings Long', {
-            'fields': ('indicator_settings_long',),
-            'classes': ('collapse', 'wide', 'extrapretty',),
-        }),
-        ('Indicator Settings Short', {
-            'fields': ('indicator_settings_short',),
-            'classes': ('collapse', 'wide', 'extrapretty',),
         }),
         ('Take Profit Percentages Long', {
             'fields': (
@@ -135,34 +118,15 @@ class DealSettingsAdmin(DisableActionsIfNoAPIKeyMixin, admin.ModelAdmin):
         'status',
     )
     list_filter = ('status',)
-    filter_horizontal = ('indicator_settings_long', 'indicator_settings_short',)
 
     def changelist_view(self, request, extra_context=None):
         if not APIKey.objects.exists():
             self.message_user(request, "Need set API Key at first", level='error')
         return super().changelist_view(request, extra_context)
 
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name in ['indicator_settings_long', 'indicator_settings_short', ]:
-            kwargs['queryset'] = IndicatorSetting.objects.all()
-        return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
+@admin.register(StockMonitorConfiguration)
+class StockMonitorConfigurationAdmin(admin.ModelAdmin):
+    list_display = ('email',)
+    fields = ('email', 'password', )
 
-@admin.register(Stock)
-class StockAdmin(admin.ModelAdmin):
-    list_display = ('name', 'active',)
-    search_fields = ('name',)
-
-    def get_readonly_fields(self, request, obj=None):
-        if obj:
-            return ('name',)
-        return ()
-
-    def has_add_permission(self, request):
-        return False
-
-    def has_change_permission(self, request, obj=None):
-        return False
-
-    def has_delete_permission(self, request, obj=None):
-        return False

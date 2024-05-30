@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+
 from src.apps.trading_platform.models import DealSettings
 
 

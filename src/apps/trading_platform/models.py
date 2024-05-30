@@ -2,8 +2,8 @@ from django.db import models
 
 
 class APIKey(models.Model):
-    api_key = models.CharField(max_length=255, verbose_name="API Key", blank=False)
-    api_secret = models.CharField(max_length=255, verbose_name="API Secret", blank=False)
+    api_key = models.CharField(max_length=256, verbose_name="API Key", blank=False)
+    api_secret = models.CharField(max_length=256, verbose_name="API Secret", blank=False)
 
     def __str__(self):
         return self.api_key
@@ -14,7 +14,7 @@ class APIKey(models.Model):
 
 
 class TradingAccount(models.Model):
-    name = models.CharField(max_length=255, blank=True, null=True, verbose_name="Name")
+    name = models.CharField(max_length=256, blank=True, null=True, verbose_name="Name")
 
     def __str__(self):
         return self.name or "Unnamed Account"
@@ -24,42 +24,13 @@ class TradingAccount(models.Model):
         verbose_name_plural = "Trading Accounts"
 
 
-class Indicator(models.Model):
-    name = models.CharField(max_length=255, verbose_name="Name")
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name = "Indicator"
-        verbose_name_plural = "Indicators"
-
-
-class IndicatorSetting(models.Model):
-    indicator = models.ForeignKey(Indicator, on_delete=models.CASCADE, related_name="settings",
-                                  verbose_name="Indicator")
-    numeric_value = models.FloatField(verbose_name="Numeric Value")
-    recognition_method = models.CharField(max_length=50, blank=True, null=True, verbose_name="Recognition Method")
-
-    def __str__(self):
-        return f"{self.indicator.name} ({self.numeric_value})"
-
-    class Meta:
-        verbose_name = "Indicator Setting"
-        verbose_name_plural = "Indicator Settings"
-
-
 class DealSettings(models.Model):
     class StatusChoices(models.TextChoices):
         ACTIVE = 'active', 'Active'
         INACTIVE = 'inactive', 'Inactive'
 
     trading_account = models.ForeignKey(TradingAccount, on_delete=models.CASCADE, verbose_name="Trading Account")
-    indicator_settings_long = models.ManyToManyField(IndicatorSetting, related_name="indicator_settings_long",
-                                                     verbose_name="Indicator Settings Long")
-    indicator_settings_short = models.ManyToManyField(IndicatorSetting, related_name="indicator_settings_short",
-                                                      verbose_name="Indicator Settings Short")
-    status = models.CharField(max_length=10, choices=StatusChoices.choices, default=StatusChoices.INACTIVE,
+    status = models.CharField(max_length=16, choices=StatusChoices.choices, default=StatusChoices.INACTIVE,
                               verbose_name="Status")
 
     enable_long_strategy = models.BooleanField(default=False, verbose_name="Enable Long Strategy")
@@ -128,10 +99,16 @@ class DealSettings(models.Model):
         verbose_name_plural = "Deal Settings"
 
 
-class Stock(models.Model):
-    name = models.CharField(verbose_name="Stock Name", max_length=128)
-    active = models.BooleanField(verbose_name="Active", default=True)
+class StockMonitorConfiguration(models.Model):
+    email = models.EmailField(verbose_name="Email")
+    password = models.CharField(max_length=256, verbose_name="Password")
+    long_strategy_payload = models.JSONField(default=dict, verbose_name="Long Strategy Payload")
+    short_strategy_payload = models.JSONField(default=dict, verbose_name="Short Strategy Payload")
+    stockmonitor_cookies = models.JSONField(default=dict, verbose_name="Stock Monitor Cookies")
+
+    def __str__(self):
+        return "Stock Monitor Configuration"
 
     class Meta:
-        verbose_name = "Stock"
-        verbose_name_plural = "Stocks"
+        verbose_name = "Stock Monitor Configuration"
+        verbose_name_plural = "Stock Monitor Configurations"
