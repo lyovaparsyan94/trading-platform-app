@@ -1,25 +1,28 @@
 from abc import ABC, abstractmethod
-from typing import Any
 
 from selenium.webdriver.ie.webdriver import WebDriver
 
 
-class IStockDataProvideRepository(ABC):
+class StockDataProvideRepository(ABC):
     @abstractmethod
-    def get_cookies(self) -> dict | Any:
+    def get_first_obj(self) -> dict:
         raise NotImplementedError
 
     @abstractmethod
-    def get_payload(self, strategy_name: str) -> dict | Any:
+    def get_payload(self, strategy_name: str) -> dict:
         raise NotImplementedError
 
     @abstractmethod
     def export_cookies(self, driver: WebDriver) -> None:
         raise NotImplementedError
 
-    def load_cookies(self) -> dict | Any:
+    def load_cookies(self) -> dict:
         raise NotImplementedError
 
     @abstractmethod
-    def update_payload(self, payload: str, strategy_name: str) -> None:
+    def update_payload_to_first_obj(self, payload: str, strategy_name: str) -> None:
+        raise NotImplementedError
+
+    @abstractmethod
+    def load_credentials(self) -> tuple[str, str]:
         raise NotImplementedError

@@ -10,6 +10,7 @@ from selenium.common.exceptions import (
     StaleElementReferenceException,
 )
 from selenium.webdriver.common.by import By
+from selenium.webdriver.ie.webdriver import WebDriver
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
@@ -17,7 +18,7 @@ logger = logging.getLogger('element_handler')
 
 
 class ElementHandler:
-    def __init__(self, driver) -> None:
+    def __init__(self, driver: WebDriver) -> None:
         """
         Initialize an ElementHandler instance.
 
@@ -77,7 +78,7 @@ class ElementHandler:
             logger.info(f"Unknown error '{name}'")
             return False
 
-    def is_shown_warning(self, warning_xpath: str = '', name: str = None) -> bool:
+    def is_shown_warning(self, warning_xpath: str = '', name: str = str | None) -> bool:
         """
         Check if a warning element is displayed.
 
