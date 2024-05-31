@@ -78,7 +78,7 @@ class ElementHandler:
             logger.info(f"Unknown error '{name}'")
             return False
 
-    def is_shown_warning(self, warning_xpath: str = '', name: str = str | None) -> bool:
+    def is_shown_warning(self, warning_xpath: str = '', name:str | None = None ) -> bool:
         """
         Check if a warning element is displayed.
 
