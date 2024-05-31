@@ -49,8 +49,7 @@ class RequestsTradeStationHTTPClient(TradeStationHTTPClient):
             headers=headers,
             cookies=cookies,
             data=data,
-            # proxies=self.proxy,
+            proxies=self.proxy,
         )
-        print(response.text)
         response.raise_for_status()
         return response.json()
