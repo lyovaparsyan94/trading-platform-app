@@ -1,13 +1,9 @@
 from abc import ABC, abstractmethod
-from typing import Literal
 
 from src.apps.trading_platform.third_party.tradestation.client import TradeStationHTTPClient
 from src.apps.trading_platform.third_party.tradestation.schemas.exchange_code_to_tokens import \
     ExchangeCodeToTokensOutput
 from src.apps.trading_platform.third_party.tradestation.urlpatterns import TRADESTATION_SIGN_IN_EXCHANGE_TOKEN_URL
-
-Scope = Literal[
-    "MarketData", "ReadAccount", "Trade", "OptionSpreads", "Matrix", "openid", "offline_access", "profile", "email"]
 
 
 class BaseTradeStationSDK(ABC):
