@@ -6,8 +6,12 @@ from selenium.webdriver.chrome.webdriver import WebDriver
 from seleniumwire import webdriver
 
 from src.apps.trading_platform.adapters.element_handler import ElementHandler
-from src.apps.trading_platform.adapters.urlpatterns import STOCKMONITOR_BASE_URL, STOCKMONITOR_FILTERS_PAGE_URL
-from src.apps.trading_platform.interfaces.stock_monitor_data_updater import IStockMonitorDataUpdater
+from src.apps.trading_platform.adapters.urlpatterns import (
+    STOCKMONITOR_BASE_URL,
+    STOCKMONITOR_FILTERS_PAGE_URL,
+    STOCKMONITOR_TEST_URL,
+)
+from src.apps.trading_platform.interfaces.i_stock_monitor_data_updater import IStockMonitorDataUpdater
 from src.apps.trading_platform.repositories.stock_monitor_data_provider import StockMonitorCookiesPayloadProvider
 
 logger = logging.getLogger('element_handler')
@@ -52,7 +56,8 @@ class StockMonitorDataUpdater(IStockMonitorDataUpdater):
         self.password = None
 
     def get_email_password(self) -> None:
-        self.email, self.password = self.data_repository.load_credentials()
+        config = self.data_repository.get_first_obj()
+        self.email, self.password = config.email, config.password
 
     def open_stockmonitor_page(self) -> None:
         self.driver.implicitly_wait(10)
@@ -99,11 +104,10 @@ class StockMonitorDataUpdater(IStockMonitorDataUpdater):
                     locator='//*[@id="btn-test"]', name='test filter')
                 if test_filter:
                     test_filter.click()
-                    request = self.driver.wait_for_request('https://www.members.stockmonitor.com/signal/test/')
+                    request = self.driver.wait_for_request(STOCKMONITOR_TEST_URL)
                     self.intercept_requests(request=request, strategy_name=strategy_name)
 
     def intercept_requests(self, request: Request, strategy_name: str) -> None:
-        time.sleep(2)
         if request.body:
             payload = request.body.decode('utf-8', errors='ignore')
             self.data_repository.update_payload_to_first_obj(payload, strategy_name)

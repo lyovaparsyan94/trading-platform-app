@@ -16,9 +16,5 @@ class IStockMonitorDataUpdater(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def intercept_requests(self, request, strategy_name) -> None:
-        raise NotImplementedError
-
-    @abstractmethod
     def update_data(self) -> None:
         raise NotImplementedError
