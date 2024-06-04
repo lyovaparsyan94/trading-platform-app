@@ -12,7 +12,7 @@ class IStockMonitorDataUpdater(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def go_filter_pages(self) -> None:
+    def go_filter_page(self) -> None:
         raise NotImplementedError
 
     @abstractmethod

@@ -21,7 +21,8 @@ class StockStrategyUseCase(BaseStocksStrategyUseCase):
                  data_repository: StockMonitorCookiesPayloadProvider,
                  request_sender: StockMonitorRequestSender,
                  data_scraper: BeautifulSoupStocksScraper,
-                 stockmonitor_authenticator: StockMonitorDataUpdater):
+                 stockmonitor_authenticator: StockMonitorDataUpdater, strategy):
+        self.strategy = strategy
         self.data_repository = data_repository
         self.request_sender = request_sender
         self.data_scraper = data_scraper
@@ -99,5 +100,6 @@ class StockStrategyUseCase(BaseStocksStrategyUseCase):
         return trade_symbols
 
     def _relogin(self) -> None:
-        self.stockmonitor_authenticator.update_data()
         logger.info("Re-logging in to update data...")
+        logger.info("getting long strategy payload...")
+        self.stockmonitor_authenticator.update_data(self.strategy)

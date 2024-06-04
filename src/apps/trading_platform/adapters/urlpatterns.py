@@ -1,4 +1,4 @@
-STOCKMONITOR_BASE_URL = "https://www.members.stockmonitor.com/"
+STOCKMONITOR_BASE_URL = "https://www.members.stockmonitor.com/auth/login/"
 STOCKMONITOR_FILTERS_PAGE_URL = "https://www.members.stockmonitor.com/signals/"
 
 STOCKMONITOR_TEST_URL = 'https://www.members.stockmonitor.com/signal/test/'

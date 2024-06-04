@@ -3,6 +3,7 @@ import time
 
 from requests import Request
 from selenium.webdriver.chrome.webdriver import WebDriver
+from selenium.webdriver.common.by import By
 from seleniumwire import webdriver
 
 from src.apps.trading_platform.adapters.element_handler import ElementHandler
@@ -78,7 +79,7 @@ class StockMonitorDataUpdater(IStockMonitorDataUpdater):
             incorrect_input = self.element_handler.is_shown_warning(
                 warning_xpath='//*[@id="errors"]', name='incorrect input')
 
-    def go_filter_pages(self) -> None:
+    def go_filter_page(self, strategy_name: str) -> None:
         self.data_repository.export_cookies(driver=self.driver)
 
         max_attempts = 10
@@ -90,31 +91,42 @@ class StockMonitorDataUpdater(IStockMonitorDataUpdater):
         else:
             raise TimeoutError("Unable to load the filters page after multiple attempts.")
 
-        long_page = self.element_handler.wait_for_element(
-            locator="//*[@id='table-signals']//a[contains(text(),'LONG')]", name='Sample Filter')
-        long_page_href = long_page.get_attribute('href')
-        short_page = self.element_handler.wait_for_element(
-            locator="//*[@id='table-signals']//a[contains(text(),'SHORT')]", name='Sample Filter')
-        short_page_href = short_page.get_attribute('href')
-        strategies = {'long': [long_page, long_page_href], 'short': [short_page, short_page_href]}
-        for strategy_name, strategy in strategies.items():
-            if strategy is not None:
-                self.driver.get(strategy[-1])
-                test_filter = self.element_handler.wait_for_element(
-                    locator='//*[@id="btn-test"]', name='test filter')
-                if test_filter:
-                    test_filter.click()
-                    request = self.driver.wait_for_request(STOCKMONITOR_TEST_URL)
-                    self.intercept_requests(request=request, strategy_name=strategy_name)
+        page = self.element_handler.wait_for_element(
+            locator=f"//*[@id='table-signals']//a[contains(text(),'{strategy_name.upper()}')]",
+            name=f'{strategy_name} Filter')
+        page_href = page.get_attribute('href')
+
+        logger.info(f"Processing {strategy_name} strategy")
+        logger.info(f"Navigating to URL: {page_href}")
+
+        self.driver.get(page_href)
+
+        common_stocks_button = self.element_handler.wait_for_element(locator='//*[@id="ssymbols-set"]',
+                                                                     name='common_stocks')
+        common_stocks_button.click()
+        logger.info(f"Common stocks button clicked for {strategy_name} strategy")
+
+        common_stocks_select = self.driver.find_element(By.XPATH, "//li[@data-value='us-type-stock']")
+        common_stocks_select.click()
+        logger.info(f"Common stocks select clicked for {strategy_name} strategy")
+
+        test_filter = self.element_handler.wait_for_element(locator='//*[@id="btn-test"]', name='test filter')
+        if test_filter:
+            test_filter.click()
+            logger.info(f"Test filter clicked for {strategy_name} strategy")
+            request = self.driver.wait_for_request(STOCKMONITOR_TEST_URL)
+            self.intercept_requests(request=request, strategy_name=strategy_name)
 
     def intercept_requests(self, request: Request, strategy_name: str) -> None:
         if request.body:
             payload = request.body.decode('utf-8', errors='ignore')
+            logger.info(f"Payload for {strategy_name} strategy: {payload}")
             self.data_repository.update_payload_to_first_obj(payload, strategy_name)
 
-    def update_data(self) -> None:
+
+    def update_data(self, strategy_name: str) -> None:
         self.get_email_password()
         self.open_stockmonitor_page()
         self.login()
-        self.go_filter_pages()
+        self.go_filter_page(strategy_name)
         self.driver.quit()
