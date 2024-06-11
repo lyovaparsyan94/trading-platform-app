@@ -27,6 +27,7 @@ class StockStrategyUseCase(BaseStocksStrategyUseCase):
         self.request_sender = request_sender
         self.data_scraper = data_scraper
         self.stockmonitor_authenticator = stockmonitor_authenticator
+        self._relogin()
 
     def get_stocks_for_strategy(self, stock_count: int, strategy_name: str) -> list[str]:
         strategy_sort = {'long': 'DESC', 'short': 'ASC'}

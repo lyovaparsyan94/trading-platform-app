@@ -149,4 +149,4 @@ class Trader:
 
 
 trader = Trader(token)
-trader.place_order(quantity="10", symbol='AMZN', strategy_name='long')
+# trader.place_order(quantity="10", symbol='AMZN', strategy_name='long')

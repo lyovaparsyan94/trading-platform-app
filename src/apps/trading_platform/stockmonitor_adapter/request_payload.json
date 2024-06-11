@@ -1,0 +1,97 @@
+{
+    "signalDef": {
+        "grouping": "",
+        "conds": [
+            {
+                "exprLeftItems": [
+                    {
+                        "bracketsOpen": "",
+                        "runon": "daily",
+                        "instrType": "barvalue",
+                        "instrCode": "high",
+                        "params": [],
+                        "output": "-3:-1",
+                        "bracketsClose": "",
+                        "operator": "",
+                        "value": ""
+                    }
+                ],
+                "op": "decreasing",
+                "exprRightItems": [
+                    {
+                        "bracketsOpen": "",
+                        "runon": "daily",
+                        "instrType": "barvalue",
+                        "instrCode": "open",
+                        "params": [],
+                        "output": "0",
+                        "bracketsClose": "",
+                        "operator": ""
+                    }
+                ]
+            },
+            {
+                "exprLeftItems": [
+                    {
+                        "bracketsOpen": "",
+                        "runon": "daily",
+                        "instrType": "barvalue",
+                        "instrCode": "close",
+                        "params": [],
+                        "output": "0",
+                        "bracketsClose": "",
+                        "operator": ""
+                    }
+                ],
+                "op": ">",
+                "exprRightItems": [
+                    {
+                        "bracketsOpen": "",
+                        "runon": "daily",
+                        "instrType": "barvalue",
+                        "instrCode": "high",
+                        "params": [],
+                        "output": "-1",
+                        "bracketsClose": "",
+                        "operator": "",
+                        "value": ""
+                    }
+                ]
+            },
+            {
+                "exprLeftItems": [
+                    {
+                        "bracketsOpen": "",
+                        "runon": "daily",
+                        "instrType": "barvalue",
+                        "instrCode": "close",
+                        "params": [],
+                        "output": "0",
+                        "bracketsClose": "",
+                        "operator": ""
+                    }
+                ],
+                "op": ">",
+                "exprRightItems": [
+                    {
+                        "bracketsOpen": "",
+                        "runon": "daily",
+                        "instrType": "constant",
+                        "instrCode": "value",
+                        "params": [],
+                        "output": "0",
+                        "bracketsClose": "",
+                        "operator": "",
+                        "value": "10",
+                        "mathFunction": ""
+                    }
+                ]
+            }
+        ]
+    },
+    "symbolsSet": "us-all",
+    "timeframe": "daily",
+    "candleOffset": "0",
+    "is_snippet": false,
+    "runId": "test-signal-1717014616938"
+}
